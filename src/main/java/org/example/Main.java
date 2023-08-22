@@ -27,7 +27,10 @@ public class Main {
                 System.out.println("3. Marquer todo comme fini");
                 System.out.println("4. Supprimer une todo");
                 System.out.println("5. Ajouter une todoTask");
-                System.out.println("6. Quitter");
+                System.out.println("6. Ajouter un utilisateur");
+                System.out.println("7. Afficher toutes les taches d'un utilisateur");
+                System.out.println("8. Supprimer un utilisateur et toutes ses tâches");
+                System.out.println("9. Quitter");
                 System.out.print("Choix : ");
 
                 int choice = scanner.nextInt();
@@ -47,11 +50,21 @@ public class Main {
                         todoDelete();
                         break;
                     case 5:
-                        updateTask();
+                        createTask();
                         break;
                     case 6:
+                        createUser();
+                        break;
+                    case 7:
+                        viewTodoUser();
+                        break;
+                    case 8:
+                        userDelete();
+                        break;
+                    case 9:
                         running = false;
                         break;
+
                     default:
                         System.out.println("Choix invalide !");
                 }
@@ -63,12 +76,24 @@ public class Main {
     }
     private static void createTodo() {
         boolean completed = false;
+        System.out.println("ID de l'utilisateur :");
+        int id_user = scanner.nextInt();
+        scanner.nextLine();
         System.out.print("Titre  : ");
         String titre = scanner.nextLine();
-        Start.addTodo(titre, completed);
+        Start.addTodo(titre, completed, id_user);
     };
 
+    private static  void createUser(){
+        System.out.println("Votre nom :");
+        String nom = scanner.nextLine();
+        Start.addUser(nom);
+    }
+
     private  static TaskInfo createTask() throws ParseException {
+
+        System.out.println("ID de ma TODO :");
+        int id = scanner.nextInt();
         scanner.nextLine();
         System.out.println("Description : ");
         String description = scanner.nextLine();
@@ -79,7 +104,7 @@ public class Main {
         System.out.println("Priorites : ");
         String priorites = scanner.nextLine();
 
-        return Start.addTaskInfo(description, date, priorites);
+        return Start.addTaskInfo(description, date, priorites, id);
     }
 
     private  static  void updateTask() throws ParseException {
@@ -93,6 +118,12 @@ public class Main {
         Start.viewAllTodo();
     }
 
+    private  static  void viewTodoUser(){
+        System.out.println("ID de l'utilisateur : ");
+        int id = scanner.nextInt();
+        Start.viewAllTaskUser(id);
+    }
+
     private  static void  todoCompleted (){
         System.out.println("ID du Todo completed : ");
         int id = scanner.nextInt();
@@ -103,5 +134,11 @@ public class Main {
         System.out.println("ID de la todo à supprimer : ");
         int id = scanner.nextInt();
         Start.deleteTodo(id);
+    }
+
+    private  static  void userDelete(){
+        System.out.println("ID de l'utilisateur à supprimer :");
+        int id = scanner.nextInt();
+        Start.deleteUser(id);
     }
 }

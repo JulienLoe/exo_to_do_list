@@ -18,14 +18,19 @@ import javax.persistence.*;
         @JoinColumn(name = "id_taskInfo")
         private TaskInfo taskInfo;
 
+        @ManyToOne
+        @JoinColumn(name = "id_utilisateur")
+        private User user;
+
         public Todo(){
 
         }
 
-        public Todo( String titre, Boolean completed) {
+        public Todo( String titre, Boolean completed, User user) {
 
             this.titre = titre;
             this.completed = false;
+            this.user = user;
         }
 
         public Todo(int id, String titre, Boolean completed) {
