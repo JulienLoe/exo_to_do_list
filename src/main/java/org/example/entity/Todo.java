@@ -14,6 +14,10 @@ import javax.persistence.*;
         private String titre;
         private Boolean completed;
 
+        @OneToOne
+        @JoinColumn(name = "id_taskInfo")
+        private TaskInfo taskInfo;
+
         public Todo(){
 
         }
@@ -56,6 +60,10 @@ import javax.persistence.*;
 
         public void setCompleted(Boolean completed) {
             this.completed = completed;
+        }
+
+        public void setTaskInfo(TaskInfo taskInfo){
+            this.taskInfo = taskInfo;
         }
 
         @Override

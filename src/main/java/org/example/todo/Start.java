@@ -1,10 +1,12 @@
 package org.example.todo;
 
+import org.example.entity.TaskInfo;
 import org.example.entity.Todo;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
+import java.sql.Date;
 import java.util.List;
 
 public class Start {
@@ -21,6 +23,20 @@ public class Start {
 
         em.getTransaction().commit();
 
+    }
+
+    public static TaskInfo addTaskInfo (String description, Date date, String propiete){
+        EntityManager em = emf.createEntityManager();
+
+        em.getTransaction().begin();
+
+        TaskInfo taskInfo = new TaskInfo(description, date, propiete );
+
+        em.persist(taskInfo);
+
+        em.getTransaction().commit();
+
+        return taskInfo;
     }
 
     public static  void  viewAllTodo(){
@@ -64,6 +80,14 @@ public class Start {
 
 
 
+    }
+
+    public  static  void updateTodo(int id, TaskInfo taskInfo){
+        EntityManager em = emf.createEntityManager();
+        em.getTransaction().begin();
+        Todo todo = em.find(Todo.class, id);
+        todo.setTaskInfo(taskInfo);
+        em.getTransaction().commit();
     }
 
     public  static void deleteTodo(int id){
