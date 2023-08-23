@@ -1,10 +1,12 @@
 package org.example.entity;
 
 import javax.persistence.*;
+import java.net.Proxy;
+import java.util.ArrayList;
+import java.util.List;
 
 
-
-    @Entity
+@Entity
     @Table(name = "todo")
     public class Todo {
 
@@ -22,6 +24,11 @@ import javax.persistence.*;
         @JoinColumn(name = "id_utilisateur")
         private User user;
 
+    @ManyToMany(cascade = CascadeType.DETACH, fetch = FetchType.EAGER)
+    @JoinTable(name = "todo_categories", joinColumns = @JoinColumn(name = "todo_id"),
+            inverseJoinColumns = @JoinColumn(name = "categories_id"))
+    private List<Categories> categories = new ArrayList<>();
+
         public Todo(){
 
         }
@@ -38,7 +45,16 @@ import javax.persistence.*;
             this.titre = titre;
             this.completed = false;
         }
-        public int getId() {
+
+    public List<Categories> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(List<Categories> categories) {
+        this.categories = categories;
+    }
+
+    public int getId() {
             return id;
         }
 
@@ -71,13 +87,18 @@ import javax.persistence.*;
             this.taskInfo = taskInfo;
         }
 
+    public void setCategories(Categories categories){
+        this.categories.add(categories);
+    }
+
         @Override
         public String toString() {
             return "todo{" +
                     "id=" + id +
                     ", titre='" + titre + '\'' +
                     ", completed=" + completed +
-                    '}';
+                    taskInfo.toString()
+            +'}';
         }
     }
 

@@ -55,4 +55,14 @@ public class TaskInfo {
     public void setPropriete(String propriete) {
         this.propriete = propriete;
     }
+
+    @Override
+    public String toString() {
+        return "TaskInfo{" +
+                "id=" + id +
+                ", description='" + description + '\'' +
+                ", date=" + date +
+                ", propriete='" + propriete + '\'' +
+                '}';
+    }
 }

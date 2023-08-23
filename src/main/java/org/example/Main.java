@@ -1,5 +1,6 @@
 package org.example;
 
+import org.example.entity.Categories;
 import org.example.entity.TaskInfo;
 import org.example.entity.Todo;
 import org.example.todo.Start;
@@ -17,6 +18,8 @@ public class Main {
     private Todo todolist = new Todo();
 
     private static Start startTodo = new Start();
+
+    private static  Categories categories = new Categories();
     public static void main(String[] args) throws ParseException {
 
 
@@ -26,11 +29,15 @@ public class Main {
                 System.out.println("2. Afficher totutes les todos");
                 System.out.println("3. Marquer todo comme fini");
                 System.out.println("4. Supprimer une todo");
-                System.out.println("5. Ajouter une todoTask");
+                System.out.println("5. Afficher toutes les taches d'une catégories");
                 System.out.println("6. Ajouter un utilisateur");
                 System.out.println("7. Afficher toutes les taches d'un utilisateur");
                 System.out.println("8. Supprimer un utilisateur et toutes ses tâches");
-                System.out.println("9. Quitter");
+                System.out.println("9. Ajouter une tache à une catégories");
+                System.out.println("10. Supprimer une catégories");
+                System.out.println("11. Supprimer une taches à une catégorie");
+                System.out.println("12. Ajouter une catégorie");
+                System.out.println("0. Quitter");
                 System.out.print("Choix : ");
 
                 int choice = scanner.nextInt();
@@ -50,7 +57,7 @@ public class Main {
                         todoDelete();
                         break;
                     case 5:
-                        createTask();
+                        viewAllCategorie();
                         break;
                     case 6:
                         createUser();
@@ -62,6 +69,18 @@ public class Main {
                         userDelete();
                         break;
                     case 9:
+                        createCategories();
+                        break;
+                    case 10:
+                        categoriesDelete();
+                        break;
+                    case 11:
+                        todoOfCategoriesDelete();
+                        break;
+                    case 12:
+                        createCategoriesAsso();
+                        break;
+                    case 0:
                         running = false;
                         break;
 
@@ -74,14 +93,16 @@ public class Main {
 
 
     }
-    private static void createTodo() {
+    private static void createTodo() throws ParseException {
         boolean completed = false;
         System.out.println("ID de l'utilisateur :");
         int id_user = scanner.nextInt();
         scanner.nextLine();
         System.out.print("Titre  : ");
         String titre = scanner.nextLine();
-        Start.addTodo(titre, completed, id_user);
+
+        Todo todo = Start.addTodo(titre, completed, id_user);
+        createTask(todo.getId());
     };
 
     private static  void createUser(){
@@ -90,11 +111,25 @@ public class Main {
         Start.addUser(nom);
     }
 
-    private  static TaskInfo createTask() throws ParseException {
-
-        System.out.println("ID de ma TODO :");
+    private  static  void createCategories(){
+        System.out.println("ID de la catégorie :");
+        int id_category = scanner.nextInt();
+        System.out.println("A quelle Todo faut-il l'associer :");
         int id = scanner.nextInt();
-        scanner.nextLine();
+        Categories categories1 = Start.viewCategory(id_category);
+
+        Start.updateTodoCategories(id, categories1);
+    }
+
+    private  static  void createCategoriesAsso(){
+        System.out.println("Nom de la catégorie :");
+        String nom = scanner.nextLine();
+        Start.addCategories(nom);
+    }
+
+    private  static TaskInfo createTask(int id) throws ParseException {
+
+
         System.out.println("Description : ");
         String description = scanner.nextLine();
         System.out.println("Date : ");
@@ -107,22 +142,30 @@ public class Main {
         return Start.addTaskInfo(description, date, priorites, id);
     }
 
-    private  static  void updateTask() throws ParseException {
-        System.out.println("ID de la Todo :");
-        int id = scanner.nextInt();
-        TaskInfo taskInfo =  createTask();
-        Start.updateTodo(id, taskInfo);
-    }
+//    private  static  void updateTask() throws ParseException {
+//        System.out.println("ID de la Todo :");
+//        int id = scanner.nextInt();
+//        TaskInfo taskInfo =  createTask();
+//        Start.updateTodo(id, taskInfo);
+//    }
 
     private static void  viewTodo(){
+
         Start.viewAllTodo();
     }
 
+    private static void  viewAllCategorie(){
+        System.out.println("ID de la catégorie :");
+        int id = scanner.nextInt();
+        Start.viewAllTodoCategory(id);
+    }
     private  static  void viewTodoUser(){
         System.out.println("ID de l'utilisateur : ");
         int id = scanner.nextInt();
         Start.viewAllTaskUser(id);
     }
+
+
 
     private  static void  todoCompleted (){
         System.out.println("ID du Todo completed : ");
@@ -140,5 +183,19 @@ public class Main {
         System.out.println("ID de l'utilisateur à supprimer :");
         int id = scanner.nextInt();
         Start.deleteUser(id);
+    }
+
+    private  static  void categoriesDelete(){
+        System.out.println("ID de la categories à supprimer :");
+        int id = scanner.nextInt();
+        Start.deleteCategories(id);
+    }
+
+    private  static  void todoOfCategoriesDelete(){
+        System.out.println("ID de la categories :");
+        int id_category = scanner.nextInt();
+        System.out.println("ID de Todo à supprimer :");
+        int id_todo = scanner.nextInt();
+        Start.deleteTodoToCategories(id_todo, id_category);
     }
 }
